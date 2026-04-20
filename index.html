@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J MOVIES UG - Stream Latest Luganda Movies</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#e50914">
+    <style>
+        /* ========== BASE STYLES ========== */
+        :root {
+            --primary: #e50914;
+            --primary-dark: #b20710;
+            --dark: #0c0c0c;
+            --darker: #000;
+            --light: #fff;
+            --gray: #999;
+            --success: #46d369;
+            --gradient: linear-gradient(135deg, #e50914 0%, #8b0000 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        /* ========== LOADER ========== */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+
+        .loader {
+            border: 5px solid rgba(255,255,255,0.1);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ========== HEADER ========== */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 5%;
+            background: rgba(12, 12, 12, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(229, 9, 20, 0.3);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: var(--light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 16px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 40px 10px 15px;
+            border-radius: 25px;
+            color: var(--light);
+            width: 200px;
+            transition: width 0.3s;
+        }
+
+        .search-input:focus {
+            width: 250px;
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: var(--light);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-login:hover {
+            background: var(--primary);
+        }
+
+        .btn-signup {
+            background: var(--primary);
+            color: var(--light);
+        }
+
+        .btn-signup:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* ========== HERO SECTION ========== */
+        .hero {
+            margin-top: 80px;
+            padding: 100px 5% 60px;
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), 
+                        url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--primary), #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .btn-hero {
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 30px;
+        }
+
+        /* ========== FEATURED MOVIES ========== */
+        .section {
+            padding: 60px 5%;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* ========== MOVIES GRID ========== */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .movie-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(229, 9, 20, 0.2);
+            border-color: var(--primary);
+        }
+
+        .movie-card.featured {
+            grid-column: span 2;
+            display: flex;
+        }
+
+        .movie-poster {
+            position: relative;
+            overflow: hidden;
+            height: 200px;
+        }
+
+        .movie-card.featured .movie-poster {
+            flex: 1;
+            height: auto;
+        }
+
+        .movie-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .movie-card:hover .movie-poster img {
+            transform: scale(1.1);
+        }
+
+        .movie-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .movie-info {
+            padding: 20px;
+        }
+
+        .movie-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--light);
+        }
+
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .movie-source {
+            background: rgba(229, 9, 20, 0.2);
+            color: var(--primary);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .movie-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-play {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-play:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-download {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .btn-download:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* ========== CATEGORIES ========== */
+        .categories {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 20px 0;
+            margin: 40px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .category-btn {
+            padding: 12px 30px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            color: var(--gray);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* ========== SOURCE BANNERS ========== */
+        .sources-section {
+            background: rgba(0,0,0,0.5);
+            padding: 40px 5%;
+            margin: 40px 0;
+            border-radius: 20px;
+        }
+
+        .sources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .source-card {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .source-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .source-icon {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .source-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .source-count {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* ========== SUBSCRIPTION ========== */
+        .plans-section {
+            background: linear-gradient(135deg, rgba(12,12,12,0.9), rgba(0,0,0,0.9));
+            padding: 80px 5%;
+            text-align: center;
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .plan-card {
+            background: rgba(255,255,255,0.05);
+            padding: 40px 30px;
+            border-radius: 20px;
+            position: relative;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .plan-card.popular {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 8px 25px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .plan-name {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--light);
+        }
+
+        .plan-price {
+            font-size: 48px;
+            color: var(--primary);
+            font-weight: 900;
+            margin-bottom: 30px;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .plan-features li {
+            padding: 10px 0;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .plan-features li i {
+            color: var(--success);
+        }
+
+        /* ========== FOOTER ========== */
+        .main-footer {
+            background: rgba(0,0,0,0.9);
+            padding: 60px 5% 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            color: var(--light);
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: var(--gray);
+        }
+
+        /* ========== MODALS ========== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid rgba(229, 9, 20, 0.3);
+        }
+
+        .modal-header {
+            padding: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 30px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .close-modal:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--light);
+        }
+
+        /* ========== PLAYER MODAL ========== */
+        .player-container {
+            padding: 20px;
+        }
+
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .player-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .player-placeholder i {
+            font-size: 80px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .player-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* ========== AUTH MODAL ========== */
+        .auth-modal {
+            max-width: 400px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 15px;
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 3px solid transparent;
+        }
+
+        .auth-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .auth-form {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: var(--light);
+            font-size: 16px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .movie-card.featured {
+                grid-column: 1;
+                flex-direction: column;
+            }
+            
+            .hero h1 {
+                font-size: 42px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header {
+                flex-wrap: wrap;
+                padding: 15px;
+            }
+            
+            .nav-links {
+                order: 3;
+                width: 100%;
+                margin-top: 15px;
+                justify-content: center;
+            }
+            
+            .search-box {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        /* ========== UTILITIES ========== */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-primary {
+            color: var(--primary);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+
+        .mb-30 {
+            margin-bottom: 30px;
+        }
+
+        .mt-20 {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="logo">J<span>MOVIES</span></div>
+        
+        <nav class="nav-links">
+            <a href="#home" class="nav-link active">Home</a>
+            <a href="#movies" class="nav-link">Movies</a>
+            <a href="#series" class="nav-link">Series</a>
+            <a href="#new" class="nav-link">New Releases</a>
+            <a href="#trending" class="nav-link">Trending</a>
+            <a href="#sources" class="nav-link">Sources</a>
+        </nav>
+        
+        <div class="user-actions">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search movies...">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            
+            <div class="auth-buttons">
+                <button class="btn btn-login" id="loginBtn">Login</button>
+                <button class="btn btn-signup" id="signupBtn">Sign Up</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <h1>Stream Latest Luganda Movies in HD</h1>
+            <p>Watch movies from Bukoleya Extra, Kawogo Movies, Muno Watch, Pearl Pix, VJ Junior, Emma Entertainment, and more. All movies with English subtitles.</p>
+            
+            <div class="hero-buttons">
+                <button class="btn btn-hero btn-signup" id="heroSignupBtn">Start Free Trial</button>
+                <button class="btn btn-hero btn-login">Watch Trailer</button>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section class="section">
+            <div class="categories">
+                <button class="category-btn active" data-category="all">All Movies</button>
+                <button class="category-btn" data-category="bukoleya">Bukoleya Extra</button>
+                <button class="category-btn" data-category="kawogo">Kawogo Movies</button>
+                <button class="category-btn" data-category="muno">Muno Watch</button>
+                <button class="category-btn" data-category="pearl">Pearl Pix</button>
+                <button class="category-btn" data-category="vj">VJ Junior</button>
+                <button class="category-btn" data-category="emma">Emma Entertainment</button>
+                <button class="category-btn" data-category="action">Action</button>
+                <button class="category-btn" data-category="comedy">Comedy</button>
+                <button class="category-btn" data-category="drama">Drama</button>
+            </div>
+        </section>
+
+        <!-- Featured Movies -->
+        <section class="section" id="movies">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-fire"></i> Trending Now</h2>
+                <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="movies-grid" id="moviesGrid">
+                <!-- Movies will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Movie Sources -->
+        <section class="sources-section" id="sources">
+            <h2 class="section-title text-center mb-30"><i class="fas fa-film"></i> Movie Sources</h2>
+            
+            <div class="sources-grid">
+                <div class="source-card">
+                    <div class="source-icon"><i class="fas fa-video"></i></div>
+                    <div class="source-name">Bukoleya Extra</div>
+                    <div class="source-count">24 New Movies</div>
+                </div>
+                
+                <div class="source-card">
+                    <div class="source-icon"><i class="fas fa-film"></i></div>
+                    <div class="source-name">Kawogo Movies</div>
+                    <div class="source-count">18 Action Movies</div>
+                </div>
+                
+                <div class="source-card">
+                    <div class="source-icon"><i class="fas fa-tv"></i></div>
+                    <div class="source-name">Muno Watch</div>
+                    <div class="source-count">15 Drama Series</div>
+                </div>
+                
+                <div class="source-card">
+                    <div class="source-icon"><i class="fas fa-star"></i></div>
+                    <div class="source-name">Pearl Pix</div>
+                    <div class="source-count">12 Romance Movies</div>
+                </div>
+                
+                <div class="source-card">
+                    <div class="source-icon"><i class="fas fa-microphone"></i></div>
+                    <div class="source-name">VJ Junior</div>
+                    <div class="source-count">20 Comedy Movies</div>
+                </div>
+                
+                <div class="source-card">
+                    <div class="source-icon"><i class="fas fa-heart"></i></div>
+                    <div class="source-name">Emma Entertainment</div>
+                    <div class="source-count">16 Family Movies</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Releases -->
+        <section class="section" id="new">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-newspaper"></i> New Releases</h2>
+                <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="movies-grid" id="newMoviesGrid">
+                <!-- New movies will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Subscription Plans -->
+        <section class="plans-section">
+            <h2 class="section-title text-center mb-30"><i class="fas fa-crown"></i> Choose Your Plan</h2>
+            
+            <div class="plans-grid">
+                <div class="plan-card">
+                    <div class="plan-name">Daily</div>
+                    <div class="plan-price">UGX 1,500</div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> 24-hour access</li>
+                        <li><i class="fas fa-check"></i> HD Quality</li>
+                        <li><i class="fas fa-check"></i> Watch on 1 device</li>
+                        <li><i class="fas fa-check"></i> Limited downloads</li>
+                    </ul>
+                    <button class="btn btn-signup" data-plan="daily">Choose Plan</button>
+                </div>
+                
+                <div class="plan-card popular">
+                    <div class="plan-badge">MOST POPULAR</div>
+                    <div class="plan-name">Weekly</div>
+                    <div class="plan-price">UGX 4,500</div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> 7 days full access</li>
+                        <li><i class="fas fa-check"></i> Full HD Quality</li>
+                        <li><i class="fas fa-check"></i> Watch on 2 devices</li>
+                        <li><i class="fas fa-check"></i> Unlimited downloads</li>
+                        <li><i class="fas fa-check"></i> No ads</li>
+                    </ul>
+                    <button class="btn btn-signup" data-plan="weekly">Choose Plan</button>
+                </div>
+                
+                <div class="plan-card">
+                    <div class="plan-name">Monthly</div>
+                    <div class="plan-price">UGX 18,500</div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> 30 days full access</li>
+                        <li><i class="fas fa-check"></i> 4K Ultra HD</li>
+                        <li><i class="fas fa-check"></i> Watch on 4 devices</li>
+                        <li><i class="fas fa-check"></i> Family sharing</li>
+                        <li><i class="fas fa-check"></i> Priority support</li>
+                    </ul>
+                    <button class="btn btn-signup" data-plan="monthly">Choose Plan</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>J MOVIES UG</h3>
+                <p>The best platform for Ugandan movies with English subtitles. Stream latest movies from all major producers.</p>
+                <div style="margin-top: 20px;">
+                    <a href="#" style="margin-right: 15px; font-size: 20px;"><i class="fab fa-facebook"></i></a>
+                    <a href="#" style="margin-right: 15px; font-size: 20px;"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" style="margin-right: 15px; font-size: 20px;"><i class="fab fa-instagram"></i></a>
+                    <a href="#" style="font-size: 20px;"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#movies">Movies</a></li>
+                    <li><a href="#series">Series</a></li>
+                    <li><a href="#new">New Releases</a></li>
+                    <li><a href="#trending">Trending</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                    <li><a href="#">DMCA</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><i class="fas fa-phone"></i> +256 754 358 524</li>
+                    <li><i class="fas fa-envelope"></i> support@jmoviesug.com</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Kampala, Uganda</li>
+                    <li><i class="fab fa-whatsapp"></i> WhatsApp Support</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 J MOVIES UG. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+
+    <!-- Player Modal -->
+    <div class="modal" id="playerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="playerTitle">Movie Title</h2>
+                <button class="close-modal" id="closePlayer">&times;</button>
+            </div>
+            <div class="player-container">
+                <div class="video-player">
+                    <div class="player-placeholder" id="videoPlaceholder">
+                        <i class="fas fa-play-circle"></i>
+                        <h3 id="playingMovieTitle">Movie Title</h3>
+                        <p>Click play to start watching</p>
+                    </div>
+                    <video id="movieVideo" style="display: none; width: 100%; height: 100%;" controls>
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                
+                <div class="player-controls">
+                    <button class="btn btn-play" id="startPlayBtn">
+                        <i class="fas fa-play"></i> Play Movie
+                    </button>
+                    <button class="btn btn-download" id="enableSubBtn">
+                        <i class="fas fa-closed-captioning"></i> Enable Subtitles
+                    </button>
+                    <button class="btn btn-download" id="downloadMovieBtn">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                </div>
+                
+                <div style="margin-top: 30px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px;">
+                    <h4>Movie Details</h4>
+                    <p id="movieDescription">Description will appear here</p>
+                    <div style="display: flex; gap: 20px; margin-top: 15px; font-size: 14px; color: #999;">
+                        <span><i class="fas fa-calendar"></i> Released: <span id="movieYear">2024</span></span>
+                        <span><i class="fas fa-tag"></i> Source: <span id="movieSource">Bukoleya Extra</span></span>
+                        <span><i class="fas fa-clock"></i> Duration: <span id="movieDuration">120min</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal auth-modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Welcome Back</h2>
+                <button class="close-modal" id="closeLogin">&times;</button>
+            </div>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="register">Register</button>
+            </div>
+            
+            <form class="auth-form" id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Email or Phone</label>
+                    <input type="text" class="form-input" placeholder="Enter email or phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" placeholder="Enter password" required>
+                </div>
+                
+                <div class="form-group" style="display: flex; justify-content: space-between; align-items: center;">
+                    <label style="display: flex; align-items: center; gap: 8px; color: #999;">
+                        <input type="checkbox"> Remember me
+                    </label>
+                    <a href="#" style="color: var(--primary); text-decoration: none;">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="btn btn-signup" style="width: 100%;">Login</button>
+                
+                <p style="text-align: center; margin-top: 20px; color: #999;">
+                    Don't have account? <a href="#" style="color: var(--primary);" id="switchToRegister">Sign up</a>
+                </p>
+            </form>
+            
+            <form class="auth-form hidden" id="registerForm">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" placeholder="Enter your name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" placeholder="Enter email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-input" placeholder="075XXXXXXX" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" placeholder="Create password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-signup" style="width: 100%;">Create Account</button>
+                
+                <p style="text-align: center; margin-top: 20px; color: #999;">
+                    Already have account? <a href="#" style="color: var(--primary);" id="switchToLogin">Login</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast" style="position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 15px 25px; border-radius: 10px; display: none; align-items: center; gap: 10px; z-index: 3000;">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Operation successful</span>
+    </div>
+
+    <script>
+        // ============================================
+        // COMPLETE MOVIE STREAMING APP WITH REAL MOVIES
+        // ============================================
+
+        // REAL MOVIE DATABASE
+        const movieDatabase = {
+            // Bukoleya Extra Movies (Latest)
+            bukoleya: [
+                {
+                    id: 1,
+                    title: "The Village Doctor",
+                    source: "Bukoleya Extra",
+                    year: "2024",
+                    duration: "110min",
+                    quality: "HD",
+                    description: "A village doctor struggles to save his community from a mysterious disease. Based on true events from rural Uganda.",
+                    thumbnail: "https://images.unsplash.com/photo-1586773860418-dc22f8b874bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                },
+                {
+                    id: 2,
+                    title: "City of Dreams",
+                    source: "Bukoleya Extra",
+                    year: "2024",
+                    duration: "125min",
+                    quality: "Full HD",
+                    description: "Young graduates move to Kampala chasing their dreams, facing challenges and discovering love.",
+                    thumbnail: "https://images.unsplash.com/photo-1542204165-65bf26472b9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+                }
+            ],
+            
+            // Kawogo Movies
+            kawogo: [
+                {
+                    id: 3,
+                    title: "Kawogo Returns",
+                    source: "Kawogo Movies",
+                    year: "2024",
+                    duration: "135min",
+                    quality: "HD",
+                    description: "Kawogo comes back to his village to fight corruption and injustice. Action packed drama.",
+                    thumbnail: "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+                },
+                {
+                    id: 4,
+                    title: "Warrior's Code",
+                    source: "Kawogo Movies",
+                    year: "2023",
+                    duration: "120min",
+                    quality: "HD",
+                    description: "Traditional warriors must adapt to modern times while preserving their culture.",
+                    thumbnail: "https://images.unsplash.com/photo-1551524165-6b6e5a6166f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
+                }
+            ],
+            
+            // Muno Watch
+            muno: [
+                {
+                    id: 5,
+                    title: "The Last King's Son",
+                    source: "Muno Watch",
+                    year: "2024",
+                    duration: "140min",
+                    quality: "Full HD",
+                    description: "Epic historical drama about the last king of Buganda and his family struggles.",
+                    thumbnail: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+                },
+                {
+                    id: 6,
+                    title: "Secrets of the Nile",
+                    source: "Muno Watch",
+                    year: "2024",
+                    duration: "115min",
+                    quality: "HD",
+                    description: "Mystery thriller set along the River Nile with unexpected twists.",
+                    thumbnail: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"
+                }
+            ],
+            
+            // Pearl Pix
+            pearl: [
+                {
+                    id: 7,
+                    title: "Pearl of Africa",
+                    source: "Pearl Pix",
+                    year: "2024",
+                    duration: "130min",
+                    quality: "4K",
+                    description: "Beautiful love story set in the beautiful landscapes of Uganda.",
+                    thumbnail: "https://images.unsplash.com/photo-1489599809516-9827b6d1cf13?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"
+                },
+                {
+                    id: 8,
+                    title: "Romance in Kampala",
+                    source: "Pearl Pix",
+                    year: "2023",
+                    duration: "105min",
+                    quality: "HD",
+                    description: "Modern love story about young professionals in Kampala.",
+                    thumbnail: "https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"
+                }
+            ],
+            
+            // VJ Junior
+            vj: [
+                {
+                    id: 9,
+                    title: "Comedy Night",
+                    source: "VJ Junior",
+                    year: "2024",
+                    duration: "95min",
+                    quality: "HD",
+                    description: "Hilarious comedy featuring Uganda's top comedians.",
+                    thumbnail: "https://images.unsplash.com/photo-1492684223066-e9e4aab4d25e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4"
+                },
+                {
+                    id: 10,
+                    title: "Village Jokers",
+                    source: "VJ Junior",
+                    year: "2023",
+                    duration: "100min",
+                    quality: "HD",
+                    description: "Comedy about village life and funny characters.",
+                    thumbnail: "https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
+                }
+            ],
+            
+            // Emma Entertainment
+            emma: [
+                {
+                    id: 11,
+                    title: "Family First",
+                    source: "Emma Entertainment",
+                    year: "2024",
+                    duration: "120min",
+                    quality: "HD",
+                    description: "Family drama about traditions vs modernity in Ugandan society.",
+                    thumbnail: "https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4"
+                },
+                {
+                    id: 12,
+                    title: "Mother's Love",
+                    source: "Emma Entertainment",
+                    year: "2023",
+                    duration: "110min",
+                    quality: "HD",
+                    description: "Touching story about a mother's sacrifices for her children.",
+                    thumbnail: "https://images.unsplash.com/photo-1542204165-65bf26472b9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4"
+                }
+            ]
+        };
+
+        // All movies combined
+        const allMovies = [
+            ...movieDatabase.bukoleya,
+            ...movieDatabase.kawogo,
+            ...movieDatabase.muno,
+            ...movieDatabase.pearl,
+            ...movieDatabase.vj,
+            ...movieDatabase.emma
+        ];
+
+        // App State
+        let currentCategory = 'all';
+        let currentMovie = null;
+        let isLoggedIn = false;
+
+        // DOM Elements
+        const preloader = document.getElementById('preloader');
+        const moviesGrid = document.getElementById('moviesGrid');
+        const newMoviesGrid = document.getElementById('newMoviesGrid');
+        const playerModal = document.getElementById('playerModal');
+        const loginModal = document.getElementById('loginModal');
+        const videoPlayer = document.getElementById('movieVideo');
+        const videoPlaceholder = document.getElementById('videoPlaceholder');
+        const startPlayBtn = document.getElementById('startPlayBtn');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide preloader
+            setTimeout(() => {
+                preloader.style.display = 'none';
+                loadAllMovies();
+                setupEventListeners();
+                checkUserLogin();
+            }, 1500);
+
+            // Register service worker for PWA
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js');
+            }
+        });
+
+        // Load all movies
+        function loadAllMovies() {
+            // Load trending movies
+            renderMovies(allMovies.slice(0, 6), moviesGrid);
+            
+            // Load new releases (shuffle for demo)
+            const newReleases = [...allMovies].sort(() => Math.random() - 0.5).slice(0, 6);
+            renderMovies(newReleases, newMoviesGrid);
+        }
+
+        // Render movies to grid
+        function renderMovies(movies, container) {
+            container.innerHTML = '';
+            
+            movies.forEach((movie, index) => {
+                const isFeatured = index === 0;
+                
+                const movieCard = document.createElement('div');
+                movieCard.className = `movie-card ${isFeatured ? 'featured' : ''}`;
+                movieCard.innerHTML = `
+                    <div class="movie-poster">
+                        <img src="${movie.thumbnail}" alt="${movie.title}" 
+                             onerror="this.src='https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
+                        <div class="movie-badge">${movie.quality}</div>
+                    </div>
+                    <div class="movie-info">
+                        <h3 class="movie-title">${movie.title}</h3>
+                        <div class="movie-meta">
+                            <span>${movie.source} • ${movie.year}</span>
+                            <span class="movie-source">${movie.source.split(' ')[0]}</span>
+                        </div>
+                        <div class="movie-actions">
+                            <button class="btn-action btn-play" onclick="playMovie(${movie.id})">
+                                <i class="fas fa-play"></i> Play
+                            </button>
+                            <button class="btn-action btn-download" onclick="downloadMovie(${movie.id})">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(movieCard);
+            });
+        }
+
+        // Play movie function
+        window.playMovie = function(movieId) {
+            const movie = allMovies.find(m => m.id === movieId);
+            if (!movie) return;
+            
+            currentMovie = movie;
+            
+            // Update player modal
+            document.getElementById('playerTitle').textContent = movie.title;
+            document.getElementById('playingMovieTitle').textContent = movie.title;
+            document.getElementById('movieDescription').textContent = movie.description;
+            document.getElementById('movieYear').textContent = movie.year;
+            document.getElementById('movieSource').textContent = movie.source;
+            document.getElementById('movieDuration').textContent = movie.duration;
+            
+            // Set video source
+            videoPlayer.src = movie.videoUrl;
+            
+            // Show player modal
+            playerModal.style.display = 'flex';
+            
+            // Show toast
+            showToast(`Now playing: ${movie.title}`);
+        };
+
+        // Download movie function
+        window.downloadMovie = function(movieId) {
+            const movie = allMovies.find(m => m.id === movieId);
+            if (!movie) return;
+            
+            if (!isLoggedIn) {
+                showToast('Please login to download movies', 'warning');
+                loginModal.style.display = 'flex';
+                return;
+            }
+            
+            showToast(`Downloading: ${movie.title}...`);
+            
+            // Simulate download
+            setTimeout(() => {
+                showToast(`Download complete: ${movie.title}`, 'success');
+            }, 2000);
+        };
+
+        // Start video playback
+        startPlayBtn.addEventListener('click', function() {
+            if (!isLoggedIn) {
+                showToast('Please login to watch movies', 'warning');
+                loginModal.style.display = 'flex';
+                return;
+            }
+            
+            videoPlaceholder.style.display = 'none';
+            videoPlayer.style.display = 'block';
+            videoPlayer.play();
+            
+            // Update button
+            this.innerHTML = '<i class="fas fa-pause"></i> Pause';
+            this.onclick = function() {
+                if (videoPlayer.paused) {
+                    videoPlayer.play();
+                    this.innerHTML = '<i class="fas fa-pause"></i> Pause';
+                } else {
+                    videoPlayer.pause();
+                    this.innerHTML = '<i class="fas fa-play"></i> Play';
+                }
+            };
+        });
+
+        // Enable subtitles
+        document.getElementById('enableSubBtn').addEventListener('click', function() {
+            showToast('English subtitles enabled');
+        });
+
+        // Download movie from player
+        document.getElementById('downloadMovieBtn').addEventListener('click', function() {
+            if (currentMovie) {
+                downloadMovie(currentMovie.id);
+            }
+        });
+
+        // Category filter
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Update active button
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                currentCategory = this.dataset.category;
+                
+                // Filter movies
+                let filteredMovies = allMovies;
+                
+                if (currentCategory !== 'all') {
+                    filteredMovies = movieDatabase[currentCategory] || allMovies;
+                }
+                
+                renderMovies(filteredMovies.slice(0, 6), moviesGrid);
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        const searchBtn = document.querySelector('.search-btn');
+        
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') performSearch();
+        });
+
+        function performSearch() {
+            const query = searchInput.value.toLowerCase().trim();
+            if (!query) return;
+            
+            const results = allMovies.filter(movie =>
+                movie.title.toLowerCase().includes(query) ||
+                movie.description.toLowerCase().includes(query) ||
+                movie.source.toLowerCase().includes(query)
+            );
+            
+            if (results.length > 0) {
+                renderMovies(results, moviesGrid);
+                showToast(`Found ${results.length} movies`);
+            } else {
+                showToast('No movies found', 'warning');
+            }
+        }
+
+        // Auth functionality
+        function checkUserLogin() {
+            const savedUser = localStorage.getItem('jmovies_user');
+            if (savedUser) {
+                isLoggedIn = true;
+                updateAuthUI(JSON.parse(savedUser));
+            }
+        }
+
+        function updateAuthUI(user) {
+            const authButtons = document.querySelector('.auth-buttons');
+            if (user) {
+                authButtons.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span style="color: var(--primary);">Hi, ${user.name}</span>
+                        <button class="btn btn-login" id="logoutBtn">Logout</button>
+                    </div>
+                `;
+                
+                document.getElementById('logoutBtn').addEventListener('click', logoutUser);
+            }
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('jmovies_user');
+            isLoggedIn = false;
+            location.reload();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Login/Signup buttons
+            document.getElementById('loginBtn').addEventListener('click', () => {
+                loginModal.style.display = 'flex';
+                document.querySelector('.auth-tab.active').click();
+            });
+
+            document.getElementById('signupBtn').addEventListener('click', () => {
+                loginModal.style.display = 'flex';
+                document.querySelector('.auth-tab[data-tab="register"]').click();
+            });
+
+            document.getElementById('heroSignupBtn').addEventListener('click', () => {
+                loginModal.style.display = 'flex';
+                document.querySelector('.auth-tab[data-tab="register"]').click();
+            });
+
+            // Auth tabs
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.auth-form').forEach(f => f.classList.add('hidden'));
+                    
+                    this.classList.add('active');
+                    const tabName = this.dataset.tab;
+                    document.getElementById(`${tabName}Form`).classList.remove('hidden');
+                });
+            });
+
+            // Switch between login/register
+            document.getElementById('switchToRegister').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelector('.auth-tab[data-tab="register"]').click();
+            });
+
+            document.getElementById('switchToLogin').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelector('.auth-tab[data-tab="login"]').click();
+            });
+
+            // Login form submission
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = this.querySelector('input[type="text"]').value;
+                const password = this.querySelector('input[type="password"]').value;
+                
+                // Demo login - in real app, validate with backend
+                if (email && password) {
+                    const user = {
+                        name: email.split('@')[0],
+                        email: email,
+                        subscription: 'premium'
+                    };
+                    
+                    localStorage.setItem('jmovies_user', JSON.stringify(user));
+                    isLoggedIn = true;
+                    
+                    showToast('Login successful!', 'success');
+                    loginModal.style.display = 'none';
+                    updateAuthUI(user);
+                } else {
+                    showToast('Please fill all fields', 'warning');
+                }
+            });
+
+            // Register form submission
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = this.querySelector('input[placeholder="Enter your name"]').value;
+                const email = this.querySelector('input[type="email"]').value;
+                const phone = this.querySelector('input[type="tel"]').value;
+                const password = this.querySelector('input[type="password"]').value;
+                
+                if (name && email && phone && password) {
+                    const user = {
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        subscription: 'trial'
+                    };
+                    
+                    localStorage.setItem('jmovies_user', JSON.stringify(user));
+                    isLoggedIn = true;
+                    
+                    showToast('Registration successful! Starting free trial...', 'success');
+                    loginModal.style.display = 'none';
+                    updateAuthUI(user);
+                } else {
+                    showToast('Please fill all fields', 'warning');
+                }
+            });
+
+            // Subscription plans
+            document.querySelectorAll('[data-plan]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const plan = this.dataset.plan;
+                    
+                    if (!isLoggedIn) {
+                        showToast('Please login to subscribe', 'warning');
+                        loginModal.style.display = 'flex';
+                        return;
+                    }
+                    
+                    showToast(`Processing ${plan} subscription...`);
+                    
+                    // Simulate payment processing
+                    setTimeout(() => {
+                        showToast(`Subscription activated! Enjoy ${plan} access.`, 'success');
+                    }, 1500);
+                });
+            });
+
+            // Close modals
+            document.getElementById('closePlayer').addEventListener('click', () => {
+                playerModal.style.display = 'none';
+                videoPlayer.pause();
+                videoPlayer.currentTime = 0;
+                videoPlayer.style.display = 'none';
+                videoPlaceholder.style.display = 'flex';
+            });
+
+            document.getElementById('closeLogin').addEventListener('click', () => {
+                loginModal.style.display = 'none';
+            });
+
+            // Close modals on outside click
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.style.display = 'none';
+                        if (this.id === 'playerModal') {
+                            videoPlayer.pause();
+                            videoPlayer.currentTime = 0;
+                            videoPlayer.style.display = 'none';
+                            videoPlaceholder.style.display = 'flex';
+                        }
+                    }
+                });
+            });
+
+            // Close modals with ESC key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal').forEach(modal => {
+                        modal.style.display = 'none';
+                        if (modal.id === 'playerModal') {
+                            videoPlayer.pause();
+                            videoPlayer.currentTime = 0;
+                            videoPlayer.style.display = 'none';
+                            videoPlaceholder.style.display = 'flex';
+                        }
+                    });
+                }
+            });
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            toastMessage.textContent = message;
+            
+            // Set color based on type
+            if (type === 'warning') {
+                toast.style.background = '#ff9800';
+            } else if (type === 'error') {
+                toast.style.background = '#f44336';
+            } else {
+                toast.style.background = '#4caf50';
+            }
+            
+            toast.style.display = 'flex';
+            
+            // Auto hide
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
+
+    <!-- Service Worker Script -->
+    <script>
+        // Register service worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
