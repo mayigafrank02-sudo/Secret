@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J MOVIES UG - Premium Luganda Movies</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#e50914">
+    <style>
+        /* ============================================
+           COMPLETE STYLES WITH ALL FEATURES
+           ============================================ */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        :root {
+            --primary: #e50914;
+            --primary-dark: #b20710;
+            --secondary: #0c0c0c;
+            --accent: #ffffff;
+            --success: #46d369;
+            --warning: #e87c03;
+            --gradient: linear-gradient(135deg, #e50914 0%, #8b0000 100%);
+            --gradient-dark: linear-gradient(135deg, #0c0c0c 0%, #222 100%);
+        }
+
+        body {
+            background-color: var(--secondary);
+            color: var(--accent);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Installation Prompt */
+        #installPrompt {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: slideUp 0.5s ease;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .install-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .install-btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Offline Indicator */
+        .offline-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--warning);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 1001;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Referral System */
+        .referral-section {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            padding: 60px 0;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .referral-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .referral-code {
+            background: white;
+            color: #333;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin: 20px 0;
+            border: 3px dashed var(--primary);
+        }
+
+        .referral-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            flex: 1;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        /* Loyalty Points */
+        .loyalty-section {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            padding: 60px 0;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .loyalty-card {
+            background: rgba(0,0,0,0.8);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            border: 3px solid #FFD700;
+        }
+
+        .points-display {
+            font-size: 48px;
+            font-weight: 700;
+            color: #FFD700;
+            margin: 20px 0;
+            text-shadow: 0 2px 10px rgba(255,215,0,0.3);
+        }
+
+        .points-progress {
+            height: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 30px 0;
+        }
+
+        .points-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            border-radius: 10px;
+        }
+
+        /* Bundle Deals */
+        .bundle-section {
+            background: var(--gradient);
+            padding: 80px 0;
+            margin: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bundle-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .bundle-card {
+            background: rgba(0,0,0,0.9);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
+            border: 3px solid var(--primary);
+        }
+
+        /* FAQ */
+        .faq-section {
+            padding: 80px 0;
+        }
+
+        .faq-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .faq-question {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-answer.active {
+            padding: 20px;
+            max-height: 500px;
+        }
+
+        /* Download Manager */
+        .downloads-panel {
+            background: rgba(0,0,0,0.9);
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 300px;
+            height: 100%;
+            z-index: 1002;
+            transform: translateX(100%);
+            transition: transform 0.3s;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .downloads-panel.active {
+            transform: translateX(0);
+        }
+
+        /* Enhanced Player */
+        .player-controls-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .player-container:hover .player-controls-bar {
+            opacity: 1;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--gradient);
+            width: 0%;
+        }
+
+        /* Seasonal Offer */
+        .seasonal-offer {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+            padding: 20px;
+            border-radius: 15px;
+            z-index: 1001;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: bounce 2s infinite;
+            display: none;
+            max-width: 300px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1002;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.show {
+            display: flex;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* Keep all existing styles from previous fix */
+        .auth-container, .movies-grid, .modal, .plan {
+            /* Previous styles remain */
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .referral-stats {
+                flex-direction: column;
+            }
+            
+            .bundle-container {
+                flex-direction: column;
+            }
+            
+            .downloads-panel {
+                width: 100%;
+            }
+        }
+
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .mt-20 { margin-top: 20px; }
+        .mb-20 { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader-container">
+            <div class="loader"></div>
+            <h2 style="color: var(--primary);">J MOVIES UG</h2>
+            <p style="color: #aaa;">Loading your premium movie experience...</p>
+        </div>
+    </div>
+
+    <!-- Offline Indicator -->
+    <div class="offline-indicator" id="offlineIndicator">
+        <i class="fas fa-wifi-slash"></i>
+        <span>You are offline. Some features may be limited.</span>
+    </div>
+
+    <!-- Installation Prompt -->
+    <div id="installPrompt">
+        <i class="fas fa-download"></i>
+        <div style="flex: 1;">
+            <h4 style="font-size: 16px; margin-bottom: 5px;">Install J MOVIES UG</h4>
+            <p style="font-size: 14px; opacity: 0.9;">Get instant access with our app!</p>
+        </div>
+        <div class="install-actions">
+            <button class="install-btn" id="installBtn">Install</button>
+            <button class="install-btn" style="background: transparent; color: white;" id="dismissInstall">Later</button>
+        </div>
+    </div>
+
+    <!-- Seasonal Offer -->
+    <div class="seasonal-offer" id="seasonalOffer">
+        <button style="position: absolute; top: 5px; right: 10px; background: none; border: none; color: #000; font-size: 20px; cursor: pointer;" id="closeOffer">&times;</button>
+        <h4><i class="fas fa-gift"></i> LIMITED TIME OFFER!</h4>
+        <p>Get 50% OFF your first month! Use code: <strong>FIRST50</strong></p>
+        <button class="install-btn" style="background: #000; color: #FFD700; margin-top: 10px;" id="claimOffer">Claim Offer</button>
+    </div>
+
+    <!-- Download Manager -->
+    <div class="downloads-panel" id="downloadsPanel">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3><i class="fas fa-download"></i> Downloads</h3>
+            <button style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;" id="closeDownloads">&times;</button>
+        </div>
+        <div id="downloadsList">
+            <!-- Downloads will appear here -->
+        </div>
+    </div>
+
+    <!-- Login Wall -->
+    <div id="loginWall">
+        <div class="app-logo">
+            <h1>J MOVIES UG</h1>
+            <p>Premium Luganda Movies Streaming</p>
+        </div>
+        
+        <div class="auth-container">
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">LOGIN</button>
+                <button class="auth-tab" data-tab="register">REGISTER</button>
+            </div>
+            
+            <form id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
+                </div>
+                <div class="form-group">
+                    <label>Referral Code (Optional)</label>
+                    <input type="text" id="loginReferralCode" class="form-control" placeholder="Enter referral code if any">
+                </div>
+                <button type="submit" class="auth-btn">LOGIN</button>
+            </form>
+            
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="registerName" class="form-control" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="registerEmail" class="form-control" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="registerPhone" class="form-control" placeholder="075XXXXXXX" required>
+                </div>
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="number" id="registerAge" class="form-control" placeholder="18" min="16" max="100" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="registerPassword" class="form-control" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label>Referral Code (Optional)</label>
+                    <input type="text" id="registerReferralCode" class="form-control" placeholder="Enter friend's referral code">
+                </div>
+                <button type="submit" class="auth-btn">REGISTER</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp">
+        <header class="app-header">
+            <div class="logo">J MOVIES UG</div>
+            <div class="user-info">
+                <span class="user-name" id="userName">User</span>
+                <button class="logout-btn" id="logoutBtn">Logout</button>
+                <button class="logout-btn" id="downloadsBtn" title="Downloads">
+                    <i class="fas fa-download"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="container">
+                <!-- Referral Section -->
+                <section class="referral-section" id="referralSection">
+                    <div class="referral-card">
+                        <h2><i class="fas fa-user-friends"></i> Refer Friends, Earn Rewards!</h2>
+                        <p>Invite friends and earn loyalty points for every subscription!</p>
+                        
+                        <div class="referral-stats">
+                            <div class="stat-item">
+                                <div class="stat-number" id="totalReferrals">0</div>
+                                <div class="stat-label">Friends Referred</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="earnedPoints">0</div>
+                                <div class="stat-label">Points Earned</div>
+                            </div>
+                        </div>
+                        
+                        <div class="referral-code" id="userReferralCode">
+                            YOUR-CODE
+                        </div>
+                        
+                        <button class="auth-btn" style="margin-top: 20px;" id="shareReferralBtn">
+                            <i class="fas fa-share-alt"></i> Share Your Code
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Loyalty Points -->
+                <section class="loyalty-section" id="loyaltySection">
+                    <div class="loyalty-card">
+                        <h2><i class="fas fa-gem"></i> Your Loyalty Points</h2>
+                        <p>Watch movies, earn points, redeem rewards!</p>
+                        
+                        <div class="points-display" id="loyaltyPoints">
+                            0
+                        </div>
+                        
+                        <div class="points-progress">
+                            <div class="points-progress-bar" id="pointsProgressBar" style="width: 0%"></div>
+                        </div>
+                        
+                        <button class="auth-btn" style="background: #FFD700; color: #000;" id="redeemPointsBtn">
+                            <i class="fas fa-gift"></i> Redeem Rewards
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Categories -->
+                <div class="categories">
+                    <button class="category-btn active" data-category="action">Action</button>
+                    <button class="category-btn" data-category="comedy">Comedy</button>
+                    <button class="category-btn" data-category="drama">Drama</button>
+                    <button class="category-btn" data-category="romance">Romance</button>
+                    <button class="category-btn" data-category="horror">Horror</button>
+                    <button class="category-btn" data-category="series">Series</button>
+                </div>
+
+                <!-- Movies Grid -->
+                <div class="movies-grid" id="moviesGrid"></div>
+
+                <!-- Bundle Deals -->
+                <section class="bundle-section" id="bundleSection">
+                    <h2 class="text-center mb-20"><i class="fas fa-box"></i> Family & Bundle Deals</h2>
+                    <div class="bundle-container">
+                        <div class="bundle-card">
+                            <h3>Duo Pack</h3>
+                            <p style="color: #aaa; margin: 10px 0;">Perfect for couples</p>
+                            <div style="font-size: 36px; font-weight: bold; color: var(--primary); margin: 20px 0;">
+                                UGX 28,000
+                            </div>
+                            <button class="auth-btn" data-bundle="duo">Get Duo Pack</button>
+                        </div>
+                        
+                        <div class="bundle-card">
+                            <h3>Family Pack</h3>
+                            <p style="color: #aaa; margin: 10px 0;">For the whole family</p>
+                            <div style="font-size: 36px; font-weight: bold; color: var(--primary); margin: 20px 0;">
+                                UGX 45,000
+                            </div>
+                            <button class="auth-btn" data-bundle="family">Get Family Pack</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FAQ -->
+                <section class="faq-section" id="faqSection">
+                    <h2 class="text-center mb-20"><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do I download movies?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Click the download button on any movie. Downloads are available for 7 days for offline viewing.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How does referral system work?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Share your referral code with friends. When they subscribe using your code, you both get 500 loyalty points!</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <button class="footer-btn active" data-section="movies">
+                <i class="fas fa-film"></i>
+                <span>Movies</span>
+            </button>
+            <button class="footer-btn" data-section="subscription">
+                <i class="fas fa-crown"></i>
+                <span>Subscription</span>
+            </button>
+            <button class="footer-btn" data-section="referral">
+                <i class="fas fa-gift"></i>
+                <span>Referral</span>
+            </button>
+            <button class="footer-btn" data-section="support">
+                <i class="fas fa-headset"></i>
+                <span>Support</span>
+            </button>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="subscriptionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Choose Your Plan</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="plan">
+                    <div class="plan-name">3-Day Free Trial</div>
+                    <div class="plan-price">UGX 0</div>
+                    <button class="select-plan" data-plan="trial">Start Free Trial</button>
+                </div>
+                
+                <div class="plan featured">
+                    <div style="position: absolute; top: -10px; right: 20px; background: var(--primary); color: white; padding: 5px 15px; border-radius: 15px; font-size: 12px;">
+                        MOST POPULAR
+                    </div>
+                    <div class="plan-name">Weekly Plan</div>
+                    <div class="plan-price">UGX 4,500</div>
+                    <button class="select-plan" data-plan="weekly">Choose Weekly</button>
+                </div>
+                
+                <div class="plan">
+                    <div class="plan-name">Monthly Plan</div>
+                    <div class="plan-price">UGX 18,500</div>
+                    <button class="select-plan" data-plan="monthly">Choose Monthly</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Player Modal -->
+    <div class="modal" id="playerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="playerTitle">Movie Title</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="player-container">
+                    <div class="player-placeholder">
+                        <i class="fas fa-play-circle"></i>
+                        <h3 id="playingMovieTitle">Movie Title</h3>
+                        <p>Click play to start watching</p>
+                        <div class="player-controls">
+                            <button class="primary" id="playVideoBtn">Play Movie</button>
+                            <button class="secondary" id="qualityBtn">Quality</button>
+                            <button class="secondary" id="watchTogetherBtn">Watch Together</button>
+                        </div>
+                    </div>
+                    <div class="player-controls-bar">
+                        <div class="progress-bar">
+                            <div class="progress" id="videoProgress"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <button style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;" id="playPauseBtn">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <span style="font-size: 14px; margin: 0 10px;" id="currentTime">0:00</span>
+                            </div>
+                            <button style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;" id="fullscreenBtn">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Operation successful!</span>
+    </div>
+
+    <script>
+        // ============================================
+        // COMPLETE APPLICATION WITH ALL FEATURES
+        // ============================================
+
+        // Enhanced Database with All Features
+        class EnhancedDatabase {
+            constructor() {
+                this.initializeAllFeatures();
+            }
+
+            initializeAllFeatures() {
+                // Initialize all feature storage
+                if (!localStorage.getItem('jmovies_referrals')) {
+                    localStorage.setItem('jmovies_referrals', JSON.stringify([]));
+                }
+                
+                if (!localStorage.getItem('jmovies_loyalty')) {
+                    localStorage.setItem('jmovies_loyalty', JSON.stringify({}));
+                }
+                
+                if (!localStorage.getItem('jmovies_downloads')) {
+                    localStorage.setItem('jmovies_downloads', JSON.stringify([]));
+                }
+                
+                if (!localStorage.getItem('jmovies_offers')) {
+                    localStorage.setItem('jmovies_offers', JSON.stringify({
+                        seasonal: true,
+                        first100: true
+                    }));
+                }
+            }
+
+            // Referral System
+            addReferral(referrer, referred) {
+                const referrals = JSON.parse(localStorage.getItem('jmovies_referrals'));
+                referrals.push({
+                    referrer,
+                    referred,
+                    date: new Date().toISOString(),
+                    status: 'pending'
+                });
+                localStorage.setItem('jmovies_referrals', JSON.stringify(referrals));
+            }
+
+            getReferralStats(email) {
+                const referrals = JSON.parse(localStorage.getItem('jmovies_referrals'));
+                const userReferrals = referrals.filter(r => r.referrer === email);
+                return {
+                    total: userReferrals.length,
+                    pending: userReferrals.filter(r => r.status === 'pending').length,
+                    completed: userReferrals.filter(r => r.status === 'completed').length
+                };
+            }
+
+            // Loyalty Points System
+            addLoyaltyPoints(email, points, reason) {
+                const loyalty = JSON.parse(localStorage.getItem('jmovies_loyalty'));
+                if (!loyalty[email]) {
+                    loyalty[email] = { points: 0, history: [] };
+                }
+                
+                loyalty[email].points += points;
+                loyalty[email].history.push({
+                    points,
+                    reason,
+                    date: new Date().toISOString(),
+                    total: loyalty[email].points
+                });
+                
+                localStorage.setItem('jmovies_loyalty', JSON.stringify(loyalty));
+                return loyalty[email].points;
+            }
+
+            getLoyaltyPoints(email) {
+                const loyalty = JSON.parse(localStorage.getItem('jmovies_loyalty'));
+                return loyalty[email] ? loyalty[email].points : 0;
+            }
+
+            // Download Manager
+            addDownload(email, movie) {
+                const downloads = JSON.parse(localStorage.getItem('jmovies_downloads'));
+                downloads.push({
+                    id: Date.now(),
+                    email,
+                    movie,
+                    progress: 0,
+                    status: 'downloading',
+                    date: new Date().toISOString()
+                });
+                localStorage.setItem('jmovies_downloads', JSON.stringify(downloads));
+            }
+
+            getDownloads(email) {
+                const downloads = JSON.parse(localStorage.getItem('jmovies_downloads'));
+                return downloads.filter(d => d.email === email);
+            }
+
+            // Seasonal Offers
+            isSeasonalOfferAvailable() {
+                const offers = JSON.parse(localStorage.getItem('jmovies_offers'));
+                return offers.seasonal;
+            }
+
+            useSeasonalOffer() {
+                const offers = JSON.parse(localStorage.getItem('jmovies_offers'));
+                offers.seasonal = false;
+                localStorage.setItem('jmovies_offers', JSON.stringify(offers));
+            }
+        }
+
+        // Enhanced User Manager
+        class EnhancedUserManager {
+            constructor() {
+                this.currentUser = null;
+            }
+
+            registerUser(email, fullName, phone, age, password, referralCode = null) {
+                const user = {
+                    email,
+                    fullName,
+                    phone,
+                    age,
+                    password,
+                    subscriptionPlan: 'none',
+                    subscriptionDate: new Date().toISOString(),
+                    isActive: true,
+                    referralCode: this.generateReferralCode(email),
+                    joinedDate: new Date().toISOString()
+                };
+                
+                localStorage.setItem(`jmovies_user_${email}`, JSON.stringify(user));
+                this.currentUser = user;
+                localStorage.setItem('jmovies_current_user', email);
+                
+                // Add referral if code provided
+                if (referralCode) {
+                    this.processReferral(referralCode, email);
+                }
+                
+                // Give welcome loyalty points
+                movieDB.addLoyaltyPoints(email, 100, 'Welcome bonus');
+                
+                return user;
+            }
+
+            generateReferralCode(email) {
+                const hash = email.split('').reduce((acc, char) => {
+                    return ((acc << 5) - acc) + char.charCodeAt(0);
+                }, 0);
+                return 'JM' + Math.abs(hash).toString(36).substr(0, 6).toUpperCase();
+            }
+
+            processReferral(referralCode, referredEmail) {
+                // Find referrer by code
+                const allUsers = this.getAllUsers();
+                const referrer = allUsers.find(u => u.referralCode === referralCode);
+                
+                if (referrer) {
+                    // Add referral record
+                    movieDB.addReferral(referrer.email, referredEmail);
+                    
+                    // Give points to both users
+                    movieDB.addLoyaltyPoints(referrer.email, 500, `Referral: ${referredEmail}`);
+                    movieDB.addLoyaltyPoints(referredEmail, 500, 'Referred by friend');
+                    
+                    return true;
+                }
+                return false;
+            }
+
+            getAllUsers() {
+                const users = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith('jmovies_user_')) {
+                        users.push(JSON.parse(localStorage.getItem(key)));
+                    }
+                }
+                return users;
+            }
+
+            loginUser(email, password) {
+                const userData = localStorage.getItem(`jmovies_user_${email}`);
+                if (!userData) {
+                    return { success: false, message: "User not found" };
+                }
+                
+                const user = JSON.parse(userData);
+                if (user.password !== password) {
+                    return { success: false, message: "Incorrect password" };
+                }
+                
+                this.currentUser = user;
+                localStorage.setItem('jmovies_current_user', email);
+                return { success: true, user };
+            }
+
+            getCurrentUser() {
+                if (this.currentUser) return this.currentUser;
+                
+                const email = localStorage.getItem('jmovies_current_user');
+                if (email) {
+                    const userData = localStorage.getItem(`jmovies_user_${email}`);
+                    if (userData) {
+                        this.currentUser = JSON.parse(userData);
+                        return this.currentUser;
+                    }
+                }
+                return null;
+            }
+
+            logoutUser() {
+                this.currentUser = null;
+                localStorage.removeItem('jmovies_current_user');
+            }
+
+            updateSubscription(plan) {
+                if (this.currentUser) {
+                    this.currentUser.subscriptionPlan = plan;
+                    this.currentUser.subscriptionDate = new Date().toISOString();
+                    this.currentUser.isActive = true;
+                    localStorage.setItem(`jmovies_user_${this.currentUser.email}`, JSON.stringify(this.currentUser));
+                }
+            }
+
+            isSubscriptionActive() {
+                const user = this.getCurrentUser();
+                if (!user) return false;
+                
+                if (user.subscriptionPlan === 'trial') {
+                    const subDate = new Date(user.subscriptionDate);
+                    const now = new Date();
+                    const daysDiff = (now - subDate) / (1000 * 60 * 60 * 24);
+                    return daysDiff <= 3;
+                }
+                
+                return user.isActive;
+            }
+        }
+
+        // Initialize systems
+        const movieDB = new EnhancedDatabase();
+        const userManager = new EnhancedUserManager();
+
+        // App state
+        let currentCategory = 'action';
+        let deferredPrompt = null;
+        let isOffline = false;
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide preloader
+            setTimeout(() => {
+                document.getElementById('preloader').style.display = 'none';
+                checkAuthStatus();
+            }, 1000);
+
+            // Setup PWA
+            setupPWA();
+            
+            // Setup offline detection
+            setupOfflineDetection();
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Show seasonal offer if available
+            showSeasonalOffer();
+        });
+
+        // Setup PWA features
+        function setupPWA() {
+            // Listen for install prompt
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                
+                // Show install prompt after delay
+                setTimeout(() => {
+                    document.getElementById('installPrompt').style.display = 'flex';
+                }, 5000);
+            });
+
+            // Check if already installed
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                console.log('App is installed as PWA');
+            }
+        }
+
+        // Setup offline detection
+        function setupOfflineDetection() {
+            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('offline', updateOnlineStatus);
+            updateOnlineStatus();
+        }
+
+        function updateOnlineStatus() {
+            isOffline = !navigator.onLine;
+            document.getElementById('offlineIndicator').style.display = isOffline ? 'flex' : 'none';
+        }
+
+        // Show seasonal offer
+        function showSeasonalOffer() {
+            if (movieDB.isSeasonalOfferAvailable()) {
+                setTimeout(() => {
+                    document.getElementById('seasonalOffer').style.display = 'block';
+                }, 3000);
+            }
+        }
+
+        // Check authentication status
+        function checkAuthStatus() {
+            const user = userManager.getCurrentUser();
+            
+            if (user) {
+                updateUserInterface(user);
+                showMainApp();
+                loadMovies(currentCategory);
+            } else {
+                showLoginWall();
+            }
+        }
+
+        // Update user interface with all features
+        function updateUserInterface(user) {
+            document.getElementById('userName').textContent = user.fullName.split(' ')[0];
+            
+            // Update referral stats
+            const referralStats = movieDB.getReferralStats(user.email);
+            document.getElementById('totalReferrals').textContent = referralStats.total;
+            document.getElementById('earnedPoints').textContent = movieDB.getLoyaltyPoints(user.email);
+            document.getElementById('userReferralCode').textContent = user.referralCode;
+            
+            // Update loyalty points
+            const points = movieDB.getLoyaltyPoints(user.email);
+            document.getElementById('loyaltyPoints').textContent = points;
+            document.getElementById('pointsProgressBar').style.width = `${Math.min(100, points / 10)}%`;
+            
+            // Show/hide sections based on subscription
+            if (userManager.isSubscriptionActive()) {
+                document.getElementById('referralSection').style.display = 'block';
+                document.getElementById('loyaltySection').style.display = 'block';
+                document.getElementById('bundleSection').style.display = 'block';
+                document.getElementById('faqSection').style.display = 'block';
+            } else {
+                document.getElementById('referralSection').style.display = 'none';
+                document.getElementById('loyaltySection').style.display = 'none';
+                document.getElementById('bundleSection').style.display = 'none';
+                document.getElementById('faqSection').style.display = 'none';
+            }
+        }
+
+        // Load movies
+        function loadMovies(category) {
+            const movies = {
+                action: [
+                    { id: 1, title: "Kawogo Returns", vj: "VJ Junior", quality: "HD", year: "2023" },
+                    { id: 2, title: "Bukoleya Wars", vj: "Bukoleya Extra", quality: "Full HD", year: "2024" }
+                ],
+                comedy: [
+                    { id: 3, title: "Emma Laughs", vj: "Emma", quality: "HD", year: "2023" }
+                ],
+                drama: [
+                    { id: 4, title: "Tears of Love", vj: "Emma", quality: "Full HD", year: "2023" }
+                ],
+                romance: [
+                    { id: 5, title: "Love in Kampala", vj: "Bukoleya Extra", quality: "HD", year: "2024" }
+                ],
+                horror: [
+                    { id: 6, title: "Night in Village", vj: "VJ Junior", quality: "HD", year: "2023" }
+                ],
+                series: [
+                    { id: 7, title: "Family Secrets", vj: "Emma", quality: "Full HD", year: "2024" }
+                ]
+            };
+
+            const moviesGrid = document.getElementById('moviesGrid');
+            moviesGrid.innerHTML = '';
+            
+            const categoryMovies = movies[category] || [];
+            
+            categoryMovies.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.className = 'movie-card';
+                movieCard.innerHTML = `
+                    <div class="movie-poster">
+                        <i class="fas fa-film" style="font-size: 48px;"></i>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">${movie.title}</div>
+                        <div class="movie-meta">${movie.vj} • ${movie.quality} • ${movie.year}</div>
+                        <div class="movie-actions">
+                            <button class="action-btn play-btn" onclick="playMovie(${movie.id}, '${category}')">
+                                <i class="fas fa-play"></i> Play
+                            </button>
+                            <button class="action-btn download-btn" onclick="downloadMovie(${movie.id}, '${category}')">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                            <button class="action-btn download-btn" onclick="addToWatchlist(${movie.id})" style="background: #FFD700; color: #000;">
+                                <i class="fas fa-bookmark"></i> Save
+                            </button>
+                        </div>
+                    </div>
+                `;
+                moviesGrid.appendChild(movieCard);
+            });
+        }
+
+        // Play movie with enhanced features
+        function playMovie(movieId, category) {
+            const user = userManager.getCurrentUser();
+            if (!user) {
+                showToast('Please login to play movies', 'error');
+                return;
+            }
+            
+            if (!userManager.isSubscriptionActive()) {
+                showToast('Please subscribe to watch movies', 'error');
+                showSubscriptionModal();
+                return;
+            }
+            
+            // Add loyalty points for watching
+            movieDB.addLoyaltyPoints(user.email, 10, 'Watched a movie');
+            updateUserInterface(user);
+            
+            // Show player
+            document.getElementById('playerModal').style.display = 'flex';
+            showToast('Movie playback started', 'success');
+        }
+
+        // Download movie with progress tracking
+        function downloadMovie(movieId, category) {
+            const user = userManager.getCurrentUser();
+            if (!user) {
+                showToast('Please login to download', 'error');
+                return;
+            }
+            
+            if (!userManager.isSubscriptionActive()) {
+                showToast('Please subscribe to download', 'error');
+                return;
+            }
+            
+            const movies = {
+                action: [
+                    { id: 1, title: "Kawogo Returns" },
+                    { id: 2, title: "Bukoleya Wars" }
+                ],
+                comedy: [{ id: 3, title: "Emma Laughs" }]
+            };
+            
+            const movie = (movies[category] || []).find(m => m.id === movieId);
+            if (movie) {
+                // Add to downloads
+                movieDB.addDownload(user.email, movie);
+                
+                // Add loyalty points
+                movieDB.addLoyaltyPoints(user.email, 20, `Downloaded: ${movie.title}`);
+                updateUserInterface(user);
+                
+                showToast(`Downloading "${movie.title}"...`, 'info');
+                
+                // Update downloads panel
+                updateDownloadsPanel();
+            }
+        }
+
+        // Update downloads panel
+        function updateDownloadsPanel() {
+            const user = userManager.getCurrentUser();
+            if (!user) return;
+            
+            const downloads = movieDB.getDownloads(user.email);
+            const downloadsList = document.getElementById('downloadsList');
+            downloadsList.innerHTML = '';
+            
+            if (downloads.length === 0) {
+                downloadsList.innerHTML = '<p style="text-align: center; color: #aaa;">No downloads yet</p>';
+                return;
+            }
+            
+            downloads.forEach(download => {
+                const item = document.createElement('div');
+                item.style.padding = '10px';
+                item.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+                item.innerHTML = `
+                    <div style="font-weight: bold;">${download.movie.title}</div>
+                    <div style="font-size: 12px; color: #aaa;">${download.status} • ${download.progress}%</div>
+                `;
+                downloadsList.appendChild(item);
+            });
+        }
+
+        // Show subscription modal
+        function showSubscriptionModal() {
+            document.getElementById('subscriptionModal').style.display = 'flex';
+        }
+
+        // Process subscription
+        function processSubscription(plan) {
+            const user = userManager.getCurrentUser();
+            if (!user) {
+                showToast('Please login first', 'error');
+                return;
+            }
+            
+            if (plan === 'trial') {
+                userManager.updateSubscription('trial');
+                showToast('Free trial activated for 3 days!', 'success');
+                updateUserInterface(user);
+            } else {
+                showToast(`Please send payment for ${plan} plan`, 'info');
+            }
+            
+            document.getElementById('subscriptionModal').style.display = 'none';
+        }
+
+        // Show toast
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            
+            // Set color
+            if (type === 'error') toast.style.background = '#dc3545';
+            else if (type === 'success') toast.style.background = '#28a745';
+            else if (type === 'warning') toast.style.background = '#ffc107';
+            else toast.style.background = '#17a2b8';
+            
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Setup all event listeners
+        function setupEventListeners() {
+            // Install PWA
+            document.getElementById('installBtn').addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        showToast('App installed!', 'success');
+                    }
+                    deferredPrompt = null;
+                }
+                document.getElementById('installPrompt').style.display = 'none';
+            });
+
+            document.getElementById('dismissInstall').addEventListener('click', () => {
+                document.getElementById('installPrompt').style.display = 'none';
+            });
+
+            // Seasonal offer
+            document.getElementById('closeOffer').addEventListener('click', () => {
+                document.getElementById('seasonalOffer').style.display = 'none';
+            });
+
+            document.getElementById('claimOffer').addEventListener('click', () => {
+                const user = userManager.getCurrentUser();
+                if (user) {
+                    movieDB.addLoyaltyPoints(user.email, 500, 'Seasonal offer');
+                    movieDB.useSeasonalOffer();
+                    showToast('Offer claimed! 500 points added.', 'success');
+                    document.getElementById('seasonalOffer').style.display = 'none';
+                    updateUserInterface(user);
+                } else {
+                    showToast('Please login to claim offer', 'error');
+                }
+            });
+
+            // Downloads panel
+            document.getElementById('downloadsBtn').addEventListener('click', () => {
+                const panel = document.getElementById('downloadsPanel');
+                panel.classList.toggle('active');
+                if (panel.classList.contains('active')) {
+                    updateDownloadsPanel();
+                }
+            });
+
+            document.getElementById('closeDownloads').addEventListener('click', () => {
+                document.getElementById('downloadsPanel').classList.remove('active');
+            });
+
+            // Referral share
+            document.getElementById('shareReferralBtn').addEventListener('click', () => {
+                const user = userManager.getCurrentUser();
+                if (user) {
+                    const text = `Join me on J MOVIES UG! Use my code ${user.referralCode} for 500 bonus points!`;
+                    if (navigator.share) {
+                        navigator.share({
+                            title: 'J MOVIES UG',
+                            text: text,
+                            url: window.location.href
+                        });
+                    } else {
+                        navigator.clipboard.writeText(text + ' ' + window.location.href);
+                        showToast('Referral link copied!', 'success');
+                    }
+                }
+            });
+
+            // Redeem points
+            document.getElementById('redeemPointsBtn').addEventListener('click', () => {
+                const user = userManager.getCurrentUser();
+                if (user) {
+                    const points = movieDB.getLoyaltyPoints(user.email);
+                    if (points >= 100) {
+                        movieDB.addLoyaltyPoints(user.email, -100, 'Redeemed reward');
+                        showToast('Reward redeemed! 1 free day added.', 'success');
+                        updateUserInterface(user);
+                    } else {
+                        showToast(`Need 100 points (you have ${points})`, 'error');
+                    }
+                }
+            });
+
+            // FAQ toggle
+            document.querySelectorAll('.faq-question').forEach(question => {
+                question.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    answer.classList.toggle('active');
+                });
+            });
+
+            // Bundle deals
+            document.querySelectorAll('[data-bundle]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const bundle = this.dataset.bundle;
+                    showToast(`${bundle} bundle selected`, 'info');
+                });
+            });
+
+            // Player controls
+            document.getElementById('playPauseBtn').addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('fa-play')) {
+                    icon.classList.remove('fa-play');
+                    icon.classList.add('fa-pause');
+                } else {
+                    icon.classList.remove('fa-pause');
+                    icon.classList.add('fa-play');
+                }
+            });
+
+            // Login/Register forms
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    const tabName = this.dataset.tab;
+                    document.getElementById(tabName + 'Form').classList.add('active');
+                });
+            });
+
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                const result = userManager.loginUser(email, password);
+                if (result.success) {
+                    showToast('Login successful!', 'success');
+                    updateUserInterface(result.user);
+                    showMainApp();
+                    loadMovies(currentCategory);
+                } else {
+                    showToast(result.message, 'error');
+                }
+            });
+
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('registerEmail').value;
+                const name = document.getElementById('registerName').value;
+                const phone = document.getElementById('registerPhone').value;
+                const age = document.getElementById('registerAge').value;
+                const password = document.getElementById('registerPassword').value;
+                const referralCode = document.getElementById('registerReferralCode').value;
+                
+                if (age < 16) {
+                    showToast('Must be 16 or older', 'error');
+                    return;
+                }
+                
+                const user = userManager.registerUser(email, name, phone, age, password, referralCode);
+                showToast('Registration successful!', 'success');
+                updateUserInterface(user);
+                showMainApp();
+                
+                // Show subscription modal for new user
+                setTimeout(() => {
+                    showSubscriptionModal();
+                }, 1000);
+            });
+
+            // Category buttons
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentCategory = this.dataset.category;
+                    loadMovies(currentCategory);
+                });
+            });
+
+            // Subscription plans
+            document.querySelectorAll('.select-plan').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    processSubscription(this.dataset.plan);
+                });
+            });
+
+            // Footer buttons
+            document.querySelectorAll('.footer-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (this.dataset.section === 'subscription') {
+                        showSubscriptionModal();
+                    } else if (this.dataset.section === 'referral') {
+                        document.getElementById('referralSection').scrollIntoView();
+                    } else if (this.dataset.section === 'support') {
+                        showToast('Contact: 0754358524', 'info');
+                    }
+                });
+            });
+
+            // Close modals
+            document.querySelectorAll('.close-modal').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.modal').style.display = 'none';
+                });
+            });
+
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                if (confirm('Logout?')) {
+                    userManager.logoutUser();
+                    showLoginWall();
+                    showToast('Logged out', 'info');
+                }
+            });
+        }
+
+        // Show/hide functions
+        function showMainApp() {
+            document.getElementById('loginWall').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+        }
+
+        function showLoginWall() {
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('loginWall').style.display = 'flex';
+        }
+
+        // Make functions available globally
+        window.playMovie = playMovie;
+        window.downloadMovie = downloadMovie;
+        window.addToWatchlist = function(movieId) {
+            showToast('Added to watchlist', 'success');
+        };
+    </script>
+</body>
+</html>
